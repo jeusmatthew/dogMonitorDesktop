@@ -1,5 +1,6 @@
 //const { Chart } = require('electron-chartjs');
 var ctx = document.getElementById('myChart');
+let jsonData=null;
 console.log("setting chart");
 var chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -14,6 +15,7 @@ var chart = new Chart(ctx, {
                 zoom:{
                     enabled:true,
                     wheel: {
+                        modifierKey:"ctrl",
                         enabled: true,
                     },
                 }
@@ -69,6 +71,98 @@ const resetZoom = function() {
         window.chart.resetZoom();
 };
 
+const setModifiers = function(){
+    const minTimeInput = document.getElementById("min_time");
+    const maxTimeInput = document.getElementById("max_time");
+    console.log(minTimeInput.value);
+    console.log(maxTimeInput.value);
+    let timeArray = jsonData.imu.map((log)=>log.sampled_at);
+    var unique = [];
+    console.log(jsonData);
+    timeArray.forEach(element => {
+        if (!unique.includes(element)) {
+            unique.push(element);
+        }
+    });
+    if(minTimeInput.value && maxTimeInput.value){
+        if(parseInt(minTimeInput.value)>parseInt(maxTimeInput.value)){
+            alert("Valor minimo de tiempo debe ser menor al valor maximo de tiempo")
+        }
+    }
+    
+    let timeValues = unique;
+    if(minTimeInput.value){
+        timeValues = timeValues.filter(time => parseInt(time) >= parseInt(minTimeInput.value))
+    }
+    console.log("mayores a :",minTimeInput.value," ",timeValues);
+    if(maxTimeInput.value){
+        timeValues = timeValues.filter(time => parseInt(time) <= parseInt(maxTimeInput.value))
+    }
+    console.log("menores a :",maxTimeInput.value," ",timeValues);
+
+    // filter values
+    const imuHeadData = jsonData.imu.filter((sample)=>sample.type == "head");
+    const imuTailData = jsonData.imu.filter((sample)=>sample.type == "tail");
+    const imuHeadValidData = imuHeadData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) == true)
+    const imuTailValidData = imuTailData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) ==true)
+    console.log("imu head valid data:",imuHeadValidData);
+    const imuHeadXSamples = imuHeadValidData.map((sample) => sample.a_x);
+    const imuHeadYSamples = imuHeadValidData.map((sample) => sample.a_y);
+    const imuHeadZSamples = imuHeadValidData.map((sample) => sample.a_z);
+    const imuTailXSamples = imuTailValidData.map((sample) => sample.a_x);
+    const imuTailYSamples = imuTailValidData.map((sample) => sample.a_y);
+    const imuTailZSamples = imuTailValidData.map((sample) => sample.a_z);
+    chart.data.labels = timeValues;
+    console.log(imuHeadXSamples);
+    chart.data.datasets =  [
+        {
+            label: 'Imu head acl X',
+            yAxisID: 'A',
+            borderColor: 'blue',
+            data:imuHeadXSamples,
+            fill: false
+        },
+        {
+            label: 'Imu head acl Y',
+            yAxisID: 'B',
+            borderColor: 'red',
+            data: imuHeadYSamples,
+            fill: false
+        },
+        {
+            label: 'Imu head acl z',
+            yAxisID: 'C',
+            borderColor: 'green',
+            data: imuHeadZSamples,
+            fill: false
+        },
+        {
+            label: 'Imu tail acl X',
+            yAxisID: 'D',
+            borderColor: 'pink',
+            data:imuTailXSamples,
+            fill: false
+        },
+        {
+            label: 'Imu tail acl Y',
+            yAxisID: 'E',
+            borderColor: 'yellow',
+            data: imuTailYSamples,
+            fill: false
+        },
+        {
+            label: 'Imu tail acl z',
+            yAxisID: 'F',
+            borderColor: 'gray',
+            data: imuTailZSamples,
+            fill: false
+        }
+
+     ];
+    chart.update();
+
+}
+
 function readTextFile(file)
 {
     var rawFile = new XMLHttpRequest();
@@ -80,7 +174,7 @@ function readTextFile(file)
             if(rawFile.status === 200 || rawFile.status == 0)
             {
                 var allText = rawFile.responseText;
-                const jsonData =  JSON.parse(allText);
+                jsonData =  JSON.parse(allText);
                 let timeArray = jsonData.imu.map((log)=>log.sampled_at);
                 var unique = [];
                 timeArray.forEach(element => {
@@ -151,6 +245,7 @@ function readTextFile(file)
                                     zoom:{
                                         enabled:true,
                                         wheel: {
+                                            modifierKey:"ctrl",
                                             enabled: true,
                                             speed:0.9
                                         },
@@ -241,156 +336,6 @@ function readTextFile(file)
                             
                     chart.update();             
     console.log("setting chart");
-//     var chart = new Chart(ctx, {
-//     type: 'line',
-//     data: {
-//         labels: unique,
-//         datasets: [
-//         {
-//             label: 'Imu head acl X',
-//             yAxisID: 'A',
-//             borderColor: 'blue',
-//             data:imuHeadXSamples,
-//             fill: false
-//         },
-//         {
-//             label: 'Imu head acl Y',
-//             yAxisID: 'B',
-//             borderColor: 'red',
-//             data: imuHeadYSamples,
-//             fill: false
-//         },
-//         {
-//             label: 'Imu head acl z',
-//             yAxisID: 'C',
-//             borderColor: 'green',
-//             data: imuHeadZSamples,
-//             fill: false
-//         },
-//         {
-//             label: 'Imu tail acl X',
-//             yAxisID: 'D',
-//             borderColor: 'pink',
-//             data:imuTailXSamples,
-//             fill: false
-//         },
-//         {
-//             label: 'Imu tail acl Y',
-//             yAxisID: 'E',
-//             borderColor: 'yellow',
-//             data: imuTailYSamples,
-//             fill: false
-//         },
-//         {
-//             label: 'Imu tail acl z',
-//             yAxisID: 'F',
-//             borderColor: 'gray',
-//             data: imuTailZSamples,
-//             fill: false
-//         }
-
-//      ]
-//     },
-
-//     // Configuration options go here
-//     options: {
-//         plugins:{
-//             zoom:{
-//                 zoom:{
-//                     enabled:true,
-//                     wheel: {
-//                         enabled: true,
-//                     },
-//                 }
-//             }
-//         },
-//         maintainAspectRatio:false,
-//         responsive: true,
-//         scales:{
-//             yAxes: 
-//             [
-//                 {
-//                     id: 'A',
-//                     type: 'linear',
-//                     position: 'left',
-//                     ticks:{
-//                         max:2,
-//                         min:-2,
-//                         fontColor:'blue'
-//                     },
-//                     borderColor: 'blue',
-//                 },
-//                 {
-//                     id: 'B',
-//                     type: 'linear',
-//                     position: 'left',
-//                     borderColor: 'red',
-
-//                 ticks: {
-//                     fontColor:"red",
-//                     max: 2,
-//                     min: -2
-//                 }
-//                 },
-//                 {
-//                     // grid: {
-//                     //     color: '#FF8000'
-//                     // },
-//                     id: 'C',
-//                     type: 'linear',
-//                     position: 'left',
-//                     borderColor: 'green',
-
-//                 ticks: {
-//                     fontColor:"green",
-//                     max: 2,
-//                     min: -2
-//                 }
-//                 },
-//                 {
-//                     id: 'D',
-//                     type: 'linear',
-//                     position: 'left',
-//                     ticks:{
-//                         max:2,
-//                         min:-2,
-//                         fontColor:'pink'
-//                     },
-//                     borderColor: 'pink',
-//                 },
-//                 {
-//                     id: 'E',
-//                     type: 'linear',
-//                     position: 'left',
-//                     borderColor: 'yellow',
-
-//                 ticks: {
-//                     fontColor:"yelow",
-//                     max: 2,
-//                     min: -2
-//                 }
-//                 },
-//                 {
-//                     // grid: {
-//                     //     color: '#FF8000'
-//                     // },
-//                     id: 'F',
-//                     type: 'linear',
-//                     position: 'left',
-//                     borderColor: 'gray',
-
-//                 ticks: {
-//                     fontColor:"gray",
-//                     max: 2,
-//                     min: -2
-//                 }
-//                 }
-//             ]
-//         },
-        
-//     }
-// });
-
             }
         }
     }
