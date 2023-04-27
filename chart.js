@@ -5,6 +5,8 @@ console.log("setting chart");
 var chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
+    responsive:false,
+    maintainAspectRatio:false,
     // The data for our dataset
     data: {
     },

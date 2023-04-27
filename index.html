@@ -5,7 +5,7 @@
   </head>
   <body>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <canvas id="myChart" width="200" height="200" style="border:1px solid" ></canvas>
+    <canvas id="myChart" height="40vh" width="80vw" style="border:1px solid" ></canvas>
     <div class="input-group mt-2 ml-1 mr-1">
       <div class="custom-file ml-2 mr-2">
         <input  id="file_input" type="file" class="custom-file-input" id="inputGroupFile04" accept="application/json" onchange="fileUploaded()">
@@ -23,6 +23,7 @@
         <input type="number" min="0" class="form-control" id="max_time" oninput="validity.valid||(value='');" >
       </div>
     </div>
+    
     <div class="row ml-3 mr-3 mt-3">
       <button onclick="resetZoom()" class="btn btn-primary mr-3">Reset zoom</button>
       <button onclick="setModifiers()" class="btn btn-primary mr-3">Apply changes</button>
