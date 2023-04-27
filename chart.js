@@ -192,6 +192,25 @@ function readTextFile(file)
                 const imuTailXSamples = imuTailData.map((sample) => sample.a_x);
                 const imuTailYSamples = imuTailData.map((sample) => sample.a_y);
                 const imuTailZSamples = imuTailData.map((sample) => sample.a_z);
+                
+                let imuHeadAllValues = [];
+                imuHeadAllValues = imuHeadAllValues.concat(imuHeadXSamples)
+                imuHeadAllValues = imuHeadAllValues.concat(imuHeadYSamples)
+                imuHeadAllValues = imuHeadAllValues.concat(imuHeadZSamples)
+
+                let imuTailAllValues = [];
+                imuTailllValues = imuTailAllValues.concat(imuTailXSamples)
+                imuTailAllValues = imuTailAllValues.concat(imuTailYSamples)
+                imuTailAllValues = imuTailAllValues.concat(imuTailZSamples)
+                const allValues = imuHeadAllValues.concat(imuTailAllValues);
+                console.log("all :",allValues);
+                const maxValue = Math.max(...allValues);
+                console.log("max: ",maxValue);
+                const minValue = Math.min(...allValues);
+                console.log("min: ",minValue);
+                
+                console.log(minValue,maxValue);
+
                 var ctx = document.getElementById('myChart');
                 console.log(ctx.value);
                 chart.data.labels =unique;
@@ -264,8 +283,8 @@ function readTextFile(file)
                                         type: 'linear',
                                         position: 'left',
                                         ticks:{
-                                            max:2,
-                                            min:-2,
+                                            max:maxValue,
+                                            min:minValue,
                                             fontColor:'blue'
                                         },
                                         borderColor: 'blue',
@@ -278,8 +297,8 @@ function readTextFile(file)
                     
                                     ticks: {
                                         fontColor:"red",
-                                        max: 2,
-                                        min: -2
+                                        max: maxValue,
+                                        min:    minValue
                                     }
                                     },
                                     {
@@ -293,8 +312,8 @@ function readTextFile(file)
                     
                                     ticks: {
                                         fontColor:"green",
-                                        max: 2,
-                                        min: -2
+                                        max: maxValue,
+                                        min: minValue
                                     }
                                     },
                                     {
@@ -302,8 +321,8 @@ function readTextFile(file)
                                         type: 'linear',
                                         position: 'left',
                                         ticks:{
-                                            max:2,
-                                            min:-2,
+                                            max:maxValue,
+                                            min:minValue,
                                             fontColor:'pink'
                                         },
                                         borderColor: 'pink',
@@ -316,8 +335,8 @@ function readTextFile(file)
                     
                                     ticks: {
                                         fontColor:"yelow",
-                                        max: 2,
-                                        min: -2
+                                        max:maxValue,
+                                        min:minValue
                                     }
                                     },
                                     {
@@ -328,8 +347,8 @@ function readTextFile(file)
                     
                                     ticks: {
                                         fontColor:"gray",
-                                        max: 2,
-                                        min: -2
+                                        max: maxValue,
+                                        min: minValue
                                     }
                                     }
                                 ]
