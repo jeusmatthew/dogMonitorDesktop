@@ -263,6 +263,10 @@ function readTextFile(file)
                             animation:false,
                             plugins:{
                                 zoom:{
+                                    pan: {
+                                        enabled: true,
+                                        mode: 'y',
+                                    },
                                     zoom:{
                                         enabled:true,
                                         wheel: {
