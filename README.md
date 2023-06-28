@@ -13,6 +13,7 @@ npm run build-intaller
 - Añadido funcionalidad de paneo de la grafica
 
 ## To do
+- Eliminar las etiquetas repetidas del lado izquierdo
 - Arreglar los rangos de tiempo al momento de reiniciarlos
 - Pasar los label de milisegundos a segundos de la forma `0:00.000`
 

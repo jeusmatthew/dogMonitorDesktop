@@ -14,6 +14,10 @@ var chart = new Chart(ctx, {
     options: {
         plugins:{
             zoom:{
+                pan:{
+                    enabled:true,
+                    mode: 'y',
+                },
                 zoom:{
                     enabled:true,
                     wheel: {
@@ -26,44 +30,18 @@ var chart = new Chart(ctx, {
         maintainAspectRatio:false,
         responsive: true,
         scales:{
-            yAxes: 
-            [
-                {
-                    id: 'A',
-                    type: 'linear',
-                    position: 'left',
-                    ticks:{
-                        max:100,
-                        min:-100,
-                        fontColor:'blue'
-                    },
-                    borderColor: 'blue',
-                },
-                {
-                    id: 'B',
-                    type: 'linear',
-                    position: 'left',
-                    borderColor: 'red',
-
-                ticks: {
-                    fontColor:"red",
-                    max: 500,
-                    min: -500
+            xAxes: [{
+                scaleLabel:{
+                    labelString: "Tiempo",
+                    display: true,
                 }
-                },
-                {
-                    id: 'C',
-                    type: 'linear',
-                    position: 'left',
-                    borderColor: 'green',
-
-                ticks: {
-                    fontColor:"green",
-                    max: 50,
-                    min: -50
+            }],
+            yAxes: [{
+                scaleLabel:{
+                    labelString: 'Valor',
+                    display: true
                 }
-                }
-            ]
+            }]
         },
         
     }
@@ -119,42 +97,36 @@ const setModifiers = function(){
     chart.data.datasets =  [
         {
             label: 'Imu head acl X',
-            yAxisID: 'A',
             borderColor: 'blue',
             data:imuHeadXSamples,
             fill: false
         },
         {
             label: 'Imu head acl Y',
-            yAxisID: 'B',
             borderColor: 'red',
             data: imuHeadYSamples,
             fill: false
         },
         {
             label: 'Imu head acl z',
-            yAxisID: 'C',
             borderColor: 'green',
             data: imuHeadZSamples,
             fill: false
         },
         {
             label: 'Imu tail acl X',
-            yAxisID: 'D',
             borderColor: 'pink',
             data:imuTailXSamples,
             fill: false
         },
         {
             label: 'Imu tail acl Y',
-            yAxisID: 'E',
             borderColor: 'yellow',
             data: imuTailYSamples,
             fill: false
         },
         {
             label: 'Imu tail acl z',
-            yAxisID: 'F',
             borderColor: 'gray',
             data: imuTailZSamples,
             fill: false
@@ -217,147 +189,42 @@ function readTextFile(file)
                 chart.data.datasets =  [
                             {
                                 label: 'Imu head acl X',
-                                yAxisID: 'A',
                                 borderColor: 'blue',
                                 data:imuHeadXSamples,
                                 fill: false
                             },
                             {
                                 label: 'Imu head acl Y',
-                                yAxisID: 'B',
                                 borderColor: 'red',
                                 data: imuHeadYSamples,
                                 fill: false
                             },
                             {
                                 label: 'Imu head acl z',
-                                yAxisID: 'C',
                                 borderColor: 'green',
                                 data: imuHeadZSamples,
                                 fill: false
                             },
                             {
                                 label: 'Imu tail acl X',
-                                yAxisID: 'D',
                                 borderColor: 'pink',
                                 data:imuTailXSamples,
                                 fill: false
                             },
                             {
                                 label: 'Imu tail acl Y',
-                                yAxisID: 'E',
                                 borderColor: 'yellow',
                                 data: imuTailYSamples,
                                 fill: false
                             },
                             {
                                 label: 'Imu tail acl z',
-                                yAxisID: 'F',
                                 borderColor: 'gray',
                                 data: imuTailZSamples,
                                 fill: false
                             }
                     
                          ];
-                chart.options = {
-                            animation:false,
-                            plugins:{
-                                zoom:{
-                                    pan: {
-                                        enabled: true,
-                                        mode: 'y',
-                                    },
-                                    zoom:{
-                                        enabled:true,
-                                        wheel: {
-                                            modifierKey:"ctrl",
-                                            enabled: true,
-                                            speed:0.9
-                                        },
-                                    }
-                                }
-                            },
-                            maintainAspectRatio:false,
-                            responsive: true,
-                            scales:{
-                                yAxes: 
-                                [
-                                    {
-                                        id: 'A',
-                                        type: 'linear',
-                                        position: 'left',
-                                        ticks:{
-                                            max:maxValue,
-                                            min:minValue,
-                                            fontColor:'blue'
-                                        },
-                                        borderColor: 'blue',
-                                    },
-                                    {
-                                        id: 'B',
-                                        type: 'linear',
-                                        position: 'left',
-                                        borderColor: 'red',
-                    
-                                    ticks: {
-                                        fontColor:"red",
-                                        max: maxValue,
-                                        min:    minValue
-                                    }
-                                    },
-                                    {
-                                        // grid: {
-                                        //     color: '#FF8000'
-                                        // },
-                                        id: 'C',
-                                        type: 'linear',
-                                        position: 'left',
-                                        borderColor: 'green',
-                    
-                                    ticks: {
-                                        fontColor:"green",
-                                        max: maxValue,
-                                        min: minValue
-                                    }
-                                    },
-                                    {
-                                        id: 'D',
-                                        type: 'linear',
-                                        position: 'left',
-                                        ticks:{
-                                            max:maxValue,
-                                            min:minValue,
-                                            fontColor:'pink'
-                                        },
-                                        borderColor: 'pink',
-                                    },
-                                    {
-                                        id: 'E',
-                                        type: 'linear',
-                                        position: 'left',
-                                        borderColor: 'yellow',
-                    
-                                    ticks: {
-                                        fontColor:"yelow",
-                                        max:maxValue,
-                                        min:minValue
-                                    }
-                                    },
-                                    {
-                                        id: 'F',
-                                        type: 'linear',
-                                        position: 'left',
-                                        borderColor: 'gray',
-                    
-                                    ticks: {
-                                        fontColor:"gray",
-                                        max: maxValue,
-                                        min: minValue
-                                    }
-                                    }
-                                ]
-                            }
-                        }
                             
                     chart.update();             
     console.log("setting chart");
