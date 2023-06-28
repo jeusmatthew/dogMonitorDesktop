@@ -57,16 +57,16 @@ const setModifiers = function(){
     console.log(minTimeInput.value);
     console.log(maxTimeInput.value);
     let timeArray = jsonData.imu.map((log)=>log.sampled_at);
-    var unique = [];
-    console.log(jsonData);
+    let timeValues = [];
+    console.log(jsonData);    
+
+    //Inserta las marcas de tiempo sin repetirlas
     timeArray.forEach(element => {
-        if (!unique.includes(element)) {
-            unique.push(element);
+        if (!timeValues.includes(element)) {
+            timeValues.push(element);
         }
     });
 
-
-    let timeValues = unique; 
     //Filtrado de head y tail
     let imuHeadData = jsonData.imu.filter((sample)=>sample.type == "head");
     let imuTailData = jsonData.imu.filter((sample)=>sample.type == "tail");
@@ -84,8 +84,8 @@ const setModifiers = function(){
         console.log("mayores a :",minTimeInput.value," ",timeValues);
         console.log("menores a :",maxTimeInput.value," ",timeValues);
 
-        imuHeadData = imuHeadData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) == true)
-        imuTailData = imuTailData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) ==true)
+        imuHeadData = imuHeadData.filter((sample)=> (parseInt(sample.sampled_at) >= parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) <= parseInt(maxTimeInput.value)) == true)
+        imuTailData = imuTailData.filter((sample)=> (parseInt(sample.sampled_at) >= parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) <= parseInt(maxTimeInput.value)) ==true)
     }
     
 
@@ -140,7 +140,7 @@ const setModifiers = function(){
 
      ];
     chart.update();
-
+    resetZoom(); //Ajusta el zoom respecto a los nuevos datos
 }
 
 function readTextFile(file)
