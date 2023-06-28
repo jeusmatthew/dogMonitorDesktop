@@ -66,7 +66,8 @@ const setModifiers = function(){
     });
     if(minTimeInput.value && maxTimeInput.value){
         if(parseInt(minTimeInput.value)>parseInt(maxTimeInput.value)){
-            alert("Valor minimo de tiempo debe ser menor al valor maximo de tiempo")
+            alert("Valor minimo de tiempo debe ser menor al valor maximo de tiempo");
+            return;
         }
     }
     
