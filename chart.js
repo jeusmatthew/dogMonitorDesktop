@@ -64,35 +64,40 @@ const setModifiers = function(){
             unique.push(element);
         }
     });
+
+
+    let timeValues = unique; 
+    //Filtrado de head y tail
+    let imuHeadData = jsonData.imu.filter((sample)=>sample.type == "head");
+    let imuTailData = jsonData.imu.filter((sample)=>sample.type == "tail");
+
+    // Verifica si existen los valores a filtrar
     if(minTimeInput.value && maxTimeInput.value){
         if(parseInt(minTimeInput.value)>parseInt(maxTimeInput.value)){
             alert("Valor minimo de tiempo debe ser menor al valor maximo de tiempo");
             return;
         }
+
+        // Se filtra a si mismo 
+        timeValues = timeValues.filter(time => parseInt(time) >= parseInt(minTimeInput.value));
+        timeValues = timeValues.filter(time => parseInt(time) <= parseInt(maxTimeInput.value));
+        console.log("mayores a :",minTimeInput.value," ",timeValues);
+        console.log("menores a :",maxTimeInput.value," ",timeValues);
+
+        imuHeadData = imuHeadData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) == true)
+        imuTailData = imuTailData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) ==true)
     }
     
-    let timeValues = unique;
-    if(minTimeInput.value){
-        timeValues = timeValues.filter(time => parseInt(time) >= parseInt(minTimeInput.value))
-    }
-    console.log("mayores a :",minTimeInput.value," ",timeValues);
-    if(maxTimeInput.value){
-        timeValues = timeValues.filter(time => parseInt(time) <= parseInt(maxTimeInput.value))
-    }
-    console.log("menores a :",maxTimeInput.value," ",timeValues);
 
-    // filter values
-    const imuHeadData = jsonData.imu.filter((sample)=>sample.type == "head");
-    const imuTailData = jsonData.imu.filter((sample)=>sample.type == "tail");
-    const imuHeadValidData = imuHeadData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) == true)
-    const imuTailValidData = imuTailData.filter((sample)=> (parseInt(sample.sampled_at) > parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) < parseInt(maxTimeInput.value)) ==true)
-    console.log("imu head valid data:",imuHeadValidData);
-    const imuHeadXSamples = imuHeadValidData.map((sample) => sample.a_x);
-    const imuHeadYSamples = imuHeadValidData.map((sample) => sample.a_y);
-    const imuHeadZSamples = imuHeadValidData.map((sample) => sample.a_z);
-    const imuTailXSamples = imuTailValidData.map((sample) => sample.a_x);
-    const imuTailYSamples = imuTailValidData.map((sample) => sample.a_y);
-    const imuTailZSamples = imuTailValidData.map((sample) => sample.a_z);
+    console.log("imu head valid data:",imuHeadData);
+    //Samples de head
+    const imuHeadXSamples = imuHeadData.map((sample) => sample.a_x);
+    const imuHeadYSamples = imuHeadData.map((sample) => sample.a_y);
+    const imuHeadZSamples = imuHeadData.map((sample) => sample.a_z);
+    //Samples de tail
+    const imuTailXSamples = imuTailData.map((sample) => sample.a_x);
+    const imuTailYSamples = imuTailData.map((sample) => sample.a_y);
+    const imuTailZSamples = imuTailData.map((sample) => sample.a_z);
     chart.data.labels = timeValues;
     console.log(imuHeadXSamples);
     chart.data.datasets =  [
