@@ -20,3 +20,5 @@ npm run build-intaller
 ## To do
 - Pasar los label de milisegundos a segundos de la forma `0:00.000`
 
+## A futuro
+- Posibilidad de añadir marcas de tiempo ![Marcas de tiempo](https://help.apple.com/assets/624CD263C8F66A56E56A8D17/624CD265C8F66A56E56A8D26/es_ES/dfb13758aab7e195b3acc0db8d9094d6.png)
