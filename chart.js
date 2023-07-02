@@ -5,8 +5,6 @@ console.log("setting chart");
 var chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
-    responsive:false,
-    maintainAspectRatio:false,
     // The data for our dataset
     data: {
     },
@@ -23,25 +21,15 @@ var chart = new Chart(ctx, {
                     wheel: {
                         modifierKey:"ctrl",
                         enabled: true,
+                        speed:0.9
                     },
                 }
             }
         },
         maintainAspectRatio:false,
         responsive: true,
+        animation:false,
         scales:{
-            xAxes: [{
-                scaleLabel:{
-                    labelString: "Tiempo",
-                    display: true,
-                }
-            }],
-            yAxes: [{
-                scaleLabel:{
-                    labelString: 'Valor',
-                    display: true
-                }
-            }]
         },
         
     }
