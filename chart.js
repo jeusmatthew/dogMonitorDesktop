@@ -10,14 +10,33 @@ var chart = new Chart(ctx, {
     },
     // Configuration options go here
     options: {
+        scales:{
+            xAxes: [{
+                type: 'time',
+                time:{
+                    parser: "mm:ss.SSS",
+                    tooltipFormat: "mm:ss.SSS",
+                    displayFormats: {
+                        millisecond: 'mm:ss.SSS'
+                    }
+                },
+                ticks: {
+                    autoSkip: true,
+                    source: 'labels',
+                    // maxRotation: 0,
+                    // autoSkipPadding: 10,
+                },
+            }],
+        },
         plugins:{
             zoom:{
                 pan:{
                     enabled:true,
-                    mode: 'y',
+                    mode: 'x',
                 },
                 zoom:{
                     enabled:true,
+                    mode: 'x',
                     wheel: {
                         modifierKey:"ctrl",
                         enabled: true,
@@ -29,9 +48,6 @@ var chart = new Chart(ctx, {
         maintainAspectRatio:false,
         responsive: true,
         animation:false,
-        scales:{
-        },
-        
     }
 });
 
@@ -76,7 +92,7 @@ const setModifiers = function(){
         imuTailData = imuTailData.filter((sample)=> (parseInt(sample.sampled_at) >= parseInt(minTimeInput.value)) && (parseInt(sample.sampled_at) <= parseInt(maxTimeInput.value)) ==true)
     }
     
-
+    
     console.log("imu head valid data:",imuHeadData);
     //Samples de head
     const imuHeadXSamples = imuHeadData.map((sample) => sample.a_x);
