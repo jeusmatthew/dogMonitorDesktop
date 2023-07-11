@@ -185,21 +185,35 @@ function readTextFile(file) {
         // console.log(Math.max(...imuHeadLabels));
 
         // console.log(imuHeadLabels);
-        const imuHeadXSamples = imuHeadData.map((sample, index) => ({
-          x: imuHeadLabels[index],
+        const imuHeadXSamples = imuHeadData.map((sample) => ({
+          x: sample.sampled_at,
           y: sample.a_x,
         }));
 
-        const imuHeadYSamples = imuHeadData.map((sample) => sample.a_y);
-        const imuHeadZSamples = imuHeadData.map((sample) => sample.a_z);
+        const imuHeadYSamples = imuHeadData.map((sample) => ({
+          x: sample.sampled_at,
+          y: sample.a_y,
+        }));
+
+        const imuHeadZSamples = imuHeadData.map((sample) => ({
+          x: sample.sampled_at,
+          y: sample.a_z,
+        }));
+
         // const imuTailXSamples = imuTailData.map((sample) => sample.a_x);
-        const imuTailXSamples = imuTailData.map((sample, index) => ({
-          x: imuTailLabels[index],
+        const imuTailXSamples = imuTailData.map((sample) => ({
+          x: sample.sampled_at,
           y: sample.a_x,
         }));
 
-        const imuTailYSamples = imuTailData.map((sample) => sample.a_y);
-        const imuTailZSamples = imuTailData.map((sample) => sample.a_z);
+        const imuTailYSamples = imuTailData.map((sample) => ({
+          x: sample.sampled_at,
+          y: sample.a_y,
+        }));
+        const imuTailZSamples = imuTailData.map((sample) => ({
+          x: sample.sampled_at,
+          y: sample.a_z,
+        }));
 
         // let imuHeadAllValues = [];
         // imuHeadAllValues = imuHeadAllValues.concat(imuHeadXSamples);
