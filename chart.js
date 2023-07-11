@@ -180,32 +180,23 @@ function readTextFile(file) {
           (sample) => sample.type == "tail"
         );
 
-        const imuHeadLabels = imuHeadData.map((sample) => sample.sampled_at);
-        const imuTailLabels = imuTailData.map((sample) => sample.sampled_at);
-        // console.log(Math.max(...imuHeadLabels));
-
-        // console.log(imuHeadLabels);
+        // los datos se almacenan como coordenadas, donde 'x' son los milisegundos cuando se capturó y 'y' son los datos del sensor
         const imuHeadXSamples = imuHeadData.map((sample) => ({
           x: sample.sampled_at,
           y: sample.a_x,
         }));
-
         const imuHeadYSamples = imuHeadData.map((sample) => ({
           x: sample.sampled_at,
           y: sample.a_y,
         }));
-
         const imuHeadZSamples = imuHeadData.map((sample) => ({
           x: sample.sampled_at,
           y: sample.a_z,
         }));
-
-        // const imuTailXSamples = imuTailData.map((sample) => sample.a_x);
         const imuTailXSamples = imuTailData.map((sample) => ({
           x: sample.sampled_at,
           y: sample.a_x,
         }));
-
         const imuTailYSamples = imuTailData.map((sample) => ({
           x: sample.sampled_at,
           y: sample.a_y,
@@ -214,24 +205,6 @@ function readTextFile(file) {
           x: sample.sampled_at,
           y: sample.a_z,
         }));
-
-        // let imuHeadAllValues = [];
-        // imuHeadAllValues = imuHeadAllValues.concat(imuHeadXSamples);
-        // imuHeadAllValues = imuHeadAllValues.concat(imuHeadYSamples);
-        // imuHeadAllValues = imuHeadAllValues.concat(imuHeadZSamples);
-
-        // let imuTailAllValues = [];
-        // imuTailllValues = imuTailAllValues.concat(imuTailXSamples);
-        // imuTailAllValues = imuTailAllValues.concat(imuTailYSamples);
-        // imuTailAllValues = imuTailAllValues.concat(imuTailZSamples);
-        // const allValues = imuHeadAllValues.concat(imuTailAllValues);
-        // console.log("all :", allValues);
-        // const maxValue = Math.max(...allValues);
-        // console.log("max: ", maxValue);
-        // const minValue = Math.min(...allValues);
-        // console.log("min: ", minValue);
-
-        // console.log(minValue, maxValue);
 
         var ctx = document.getElementById("myChart");
         console.log(ctx.value);
