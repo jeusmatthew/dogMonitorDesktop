@@ -33,11 +33,11 @@ var chart = new Chart(ctx, {
       zoom: {
         pan: {
           enabled: true,
-          mode: "x",
+          mode: "y",
         },
         zoom: {
           enabled: true,
-          mode: "x",
+          mode: "y",
           wheel: {
             modifierKey: "ctrl",
             enabled: true,
