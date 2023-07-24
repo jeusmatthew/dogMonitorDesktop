@@ -267,9 +267,9 @@ const fileUploaded = async function () {
 const labelGenerator = function (minNumber, maxNumber) {
   const labelsArr = [];
   let step = 100;
-  // Se redondea el numero al multiplo de 100 mas cercano
-  minNumber = Math.floor(minNumber / 100) * 100;
-  maxNumber = Math.ceil(maxNumber / 100) * 100;
+  // Se redondea el numero al multiplo de la variable step mas cercano
+  minNumber = Math.floor(minNumber / step) * step;
+  maxNumber = Math.ceil(maxNumber / step) * step;
 
   for (let number = minNumber; number <= maxNumber; number += step) {
     labelsArr.push(number);
