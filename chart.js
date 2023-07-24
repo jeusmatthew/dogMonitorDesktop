@@ -271,7 +271,7 @@ const labelGenerator = function (minNumber, maxNumber) {
   minNumber = Math.floor(minNumber / 100) * 100;
   maxNumber = Math.ceil(maxNumber / 100) * 100;
 
-  for (let number = minNumber; number < maxNumber; number += step) {
+  for (let number = minNumber; number <= maxNumber; number += step) {
     labelsArr.push(number);
   }
 
