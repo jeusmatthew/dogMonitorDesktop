@@ -209,9 +209,7 @@ function readTextFile(file) {
         var ctx = document.getElementById("myChart");
         console.log(ctx.value);
         // chart.data.labels = unique;
-        chart.data.labels = labelGenerator(
-          Math.ceil(Math.max(...unique) / 100)
-        );
+        chart.data.labels = labelGenerator(0, Math.max(...unique));
         chart.data.datasets = [
           {
             label: "Imu head acl X",
@@ -266,11 +264,15 @@ const fileUploaded = async function () {
   readTextFile("file:///" + filePath.path);
 };
 
-const labelGenerator = function (max) {
+const labelGenerator = function (minNumber, maxNumber) {
   const labelsArr = [];
+  let step = 100;
+  // Se redondea el numero al multiplo de 100 mas cercano
+  minNumber = Math.floor(minNumber / 100) * 100;
+  maxNumber = Math.ceil(maxNumber / 100) * 100;
 
-  for (let i = 0; i <= max; i++) {
-    labelsArr.push(i * 100);
+  for (let number = minNumber; number < maxNumber; number += step) {
+    labelsArr.push(number);
   }
 
   return labelsArr;
