@@ -62,7 +62,7 @@ const setModifiers = function () {
   const minTimeInput = formatToMilliseconds(rawMinTimeInput.value);
   const maxTimeInput = formatToMilliseconds(rawMaxTimeInput.value);
 
-  let timeArray = jsonData.imu.map((log) => log.sampled_at);
+  const timeArray = jsonData.imu.map((log) => log.sampled_at);
   console.log(jsonData);
 
   let timeValues = labelGenerator(0, Math.max(...timeArray), 100);
@@ -179,13 +179,8 @@ function readTextFile(file) {
       if (rawFile.status === 200 || rawFile.status == 0) {
         var allText = rawFile.responseText;
         jsonData = JSON.parse(allText);
-        let timeArray = jsonData.imu.map((log) => log.sampled_at);
-        var unique = [];
-        timeArray.forEach((element) => {
-          if (!unique.includes(element)) {
-            unique.push(element);
-          }
-        });
+        const timeArray = jsonData.imu.map((log) => log.sampled_at);
+
         const imuHeadData = jsonData.imu.filter(
           (sample) => sample.type == "head"
         );
@@ -221,9 +216,7 @@ function readTextFile(file) {
 
         var ctx = document.getElementById("myChart");
         console.log(ctx.value);
-        // chart.data.labels = unique;
-        chart.data.labels = labelGenerator(0, Math.max(...unique), 100);
-
+        chart.data.labels = labelGenerator(0, Math.max(...timeArray), 100);
         chart.data.datasets = [
           {
             label: "Imu head acl X",
@@ -291,7 +284,6 @@ const labelGenerator = function (minNumber, maxNumber, step) {
   return labelsArr;
 };
 
-// const REGEX = /^(?:(\d+):)?([0-5]?[0-9])(?:\.(\d{3}))?$/;
 const REGEX = /^(?:(\d+):)?(\d+)?(?:\.(\d{3}))?$/;
 const TimeFormat = {
   Minutes: 1,
