@@ -57,63 +57,76 @@ const resetZoom = function () {
 };
 
 const setModifiers = function () {
-  const minTimeInput = document.getElementById("min_time");
-  const maxTimeInput = document.getElementById("max_time");
-  console.log(minTimeInput.value);
-  console.log(maxTimeInput.value);
+  const rawMinTimeInput = document.getElementById("min_time");
+  const rawMaxTimeInput = document.getElementById("max_time");
+  const minTimeInput = formatToMilliseconds(rawMinTimeInput.value);
+  const maxTimeInput = formatToMilliseconds(rawMaxTimeInput.value);
+
   let timeArray = jsonData.imu.map((log) => log.sampled_at);
-  let timeValues = [];
   console.log(jsonData);
 
-  //Inserta las marcas de tiempo sin repetirlas
-  timeArray.forEach((element) => {
-    if (!timeValues.includes(element)) {
-      timeValues.push(element);
-    }
-  });
+  let timeValues = labelGenerator(0, Math.max(...timeArray), 100);
 
   //Filtrado de head y tail
   let imuHeadData = jsonData.imu.filter((sample) => sample.type == "head");
   let imuTailData = jsonData.imu.filter((sample) => sample.type == "tail");
 
   // Verifica si existen los valores a filtrar
-  if (minTimeInput.value && maxTimeInput.value) {
-    if (parseInt(minTimeInput.value) > parseInt(maxTimeInput.value)) {
+  if (rawMinTimeInput.value && rawMaxTimeInput.value) {
+    if (parseInt(minTimeInput) > parseInt(maxTimeInput)) {
       alert("Valor minimo de tiempo debe ser menor al valor maximo de tiempo");
       return;
     }
 
     // Se filtra a si mismo
     timeValues = timeValues.filter(
-      (time) => parseInt(time) >= parseInt(minTimeInput.value)
+      (time) => parseInt(time) >= minTimeInput && parseInt(time) <= maxTimeInput
     );
-    timeValues = timeValues.filter(
-      (time) => parseInt(time) <= parseInt(maxTimeInput.value)
-    );
-    console.log("mayores a :", minTimeInput.value, " ", timeValues);
-    console.log("menores a :", maxTimeInput.value, " ", timeValues);
+
+    console.log("mayores a :", minTimeInput, " ", timeValues);
+    console.log("menores a :", maxTimeInput, " ", timeValues);
 
     imuHeadData = imuHeadData.filter(
       (sample) =>
-        parseInt(sample.sampled_at) >= parseInt(minTimeInput.value) &&
-        parseInt(sample.sampled_at) <= parseInt(maxTimeInput.value) == true
+        parseInt(sample.sampled_at) >= minTimeInput &&
+        parseInt(sample.sampled_at) <= maxTimeInput == true
     );
     imuTailData = imuTailData.filter(
       (sample) =>
-        parseInt(sample.sampled_at) >= parseInt(minTimeInput.value) &&
-        parseInt(sample.sampled_at) <= parseInt(maxTimeInput.value) == true
+        parseInt(sample.sampled_at) >= minTimeInput &&
+        parseInt(sample.sampled_at) <= maxTimeInput == true
     );
   }
 
   console.log("imu head valid data:", imuHeadData);
-  //Samples de head
-  const imuHeadXSamples = imuHeadData.map((sample) => sample.a_x);
-  const imuHeadYSamples = imuHeadData.map((sample) => sample.a_y);
-  const imuHeadZSamples = imuHeadData.map((sample) => sample.a_z);
-  //Samples de tail
-  const imuTailXSamples = imuTailData.map((sample) => sample.a_x);
-  const imuTailYSamples = imuTailData.map((sample) => sample.a_y);
-  const imuTailZSamples = imuTailData.map((sample) => sample.a_z);
+  // los datos se almacenan como coordenadas, donde 'x' son los milisegundos cuando se capturó y 'y' son los datos del sensor
+  //head
+  const imuHeadXSamples = imuHeadData.map((sample) => ({
+    x: sample.sampled_at,
+    y: sample.a_x,
+  }));
+  const imuHeadYSamples = imuHeadData.map((sample) => ({
+    x: sample.sampled_at,
+    y: sample.a_y,
+  }));
+  const imuHeadZSamples = imuHeadData.map((sample) => ({
+    x: sample.sampled_at,
+    y: sample.a_z,
+  }));
+  //tail
+  const imuTailXSamples = imuTailData.map((sample) => ({
+    x: sample.sampled_at,
+    y: sample.a_x,
+  }));
+  const imuTailYSamples = imuTailData.map((sample) => ({
+    x: sample.sampled_at,
+    y: sample.a_y,
+  }));
+  const imuTailZSamples = imuTailData.map((sample) => ({
+    x: sample.sampled_at,
+    y: sample.a_z,
+  }));
+
   chart.data.labels = timeValues;
   console.log(imuHeadXSamples);
   chart.data.datasets = [
@@ -209,7 +222,8 @@ function readTextFile(file) {
         var ctx = document.getElementById("myChart");
         console.log(ctx.value);
         // chart.data.labels = unique;
-        chart.data.labels = labelGenerator(0, Math.max(...unique));
+        chart.data.labels = labelGenerator(0, Math.max(...unique), 100);
+
         chart.data.datasets = [
           {
             label: "Imu head acl X",
@@ -264,9 +278,8 @@ const fileUploaded = async function () {
   readTextFile("file:///" + filePath.path);
 };
 
-const labelGenerator = function (minNumber, maxNumber) {
+const labelGenerator = function (minNumber, maxNumber, step) {
   const labelsArr = [];
-  let step = 100;
   // Se redondea el numero al multiplo de la variable step mas cercano
   minNumber = Math.floor(minNumber / step) * step;
   maxNumber = Math.ceil(maxNumber / step) * step;
@@ -276,4 +289,30 @@ const labelGenerator = function (minNumber, maxNumber) {
   }
 
   return labelsArr;
+};
+
+// const REGEX = /^(?:(\d+):)?([0-5]?[0-9])(?:\.(\d{3}))?$/;
+const REGEX = /^(?:(\d+):)?(\d+)?(?:\.(\d{3}))?$/;
+const TimeFormat = {
+  Minutes: 1,
+  Seconds: 2,
+  Milliseconds: 3,
+  MinutesToMs: 60000,
+  SecondsToMs: 1000,
+};
+
+const formatToMilliseconds = function (string) {
+  const timeGroups = string.match(REGEX);
+
+  // "|| 0" Convierte NaN a 0
+  const minutes = parseInt(timeGroups[TimeFormat.Minutes]) || 0;
+  const seconds = parseInt(timeGroups[TimeFormat.Seconds]);
+  const milliseconds = parseInt(timeGroups[TimeFormat.Milliseconds]) || 0;
+
+  const totalMilliseconds =
+    minutes * TimeFormat.MinutesToMs +
+    seconds * TimeFormat.SecondsToMs +
+    milliseconds;
+
+  return totalMilliseconds;
 };

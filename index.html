@@ -3,6 +3,12 @@
   <head>
     <title>Chart.js example</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+
+    <style>
+      input:invalid{
+        border: 1px solid red;
+      }
+    </style>
   </head>
   <body>
     <div class="chart-container position-relative m-3 border rounded border-secondary" style="height: 70vh;">
@@ -19,11 +25,11 @@
     <div class="input-group">
       <div class="col" >
         <p class="text-justify mt-3 mb-0">Seleccione el rango minimo de tiempo</p>
-        <input type="number" min="0" class="form-control" id="min_time" oninput="validity.valid||(value='');" >
+        <input type="text" class="form-control" id="min_time" pattern="^(?:(\d+):)?(\d+)?(?:\.(\d{3}))?$" value="00:00.000">
       </div>
       <div class="col" >
         <p class="text-justify mt-3 mb-0">Seleccione el rango maximo de tiempo</p>
-        <input type="number" min="0" class="form-control" id="max_time" oninput="validity.valid||(value='');" >
+        <input type="text" class="form-control" id="max_time" pattern="^(?:(\d+):)?(\d+)?(?:\.(\d{3}))?$" value="00:00.000">
       </div>
     </div>
     
